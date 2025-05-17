@@ -1,4 +1,8 @@
+// ===============================
+// SISTEMA DE PEDIDOS - JS PRINCIPAL
+// ===============================
 document.addEventListener('DOMContentLoaded', function () {
+    // ======= Seletores principais =======
     const listaMesas = document.querySelector('.listaordenadamesas.contarMesa');
     const listaPedidos = document.querySelector('.listaordenadamesas.esquerda');
     const listaValores = document.querySelector('.listaordenadamesas.valorProduto');
@@ -17,16 +21,22 @@ document.addEventListener('DOMContentLoaded', function () {
     const btnFormaPagamento = document.getElementById('btnFormaPagamento');
     const modalPagamento = document.getElementById('modalPagamento');
     const btnCancelarPagamento = document.getElementById('btnCancelarPagamento');
+    const modalTroco = document.getElementById('modalTroco');
+    const valorTotalTroco = document.getElementById('valorTotalTroco');
+    const valorRecebido = document.getElementById('valorRecebido');
+    const btnCalcularTroco = document.getElementById('btnCalcularTroco');
+    const btnFecharTroco = document.getElementById('btnFecharTroco');
+    const resultadoTroco = document.getElementById('resultadoTroco');
 
-    // Agora cada mesa tem um nome/numero e seus pedidos
-    let mesas = []; // Exemplo: [{nome: "1", pedidos: []}, {nome: "12", pedidos: []}, {nome: "24", pedidos: []}]
+    // ======= Variáveis de estado =======
+    let mesas = []; // [{nome: "1", pedidos: []}, ...]
     let mesaAtual = -1;
     let pedidosRemovidos = [];
     let btnRestaurarPedido = null;
     let ultimaMesaRemovida = null;
     let btnRestaurarMesa = null;
-    let formaPagamentoSelecionada = '';
 
+    // ======= Renderização das mesas =======
     function renderizarMesas() {
         listaMesas.innerHTML = '';
         mesas.forEach((mesa, idx) => {
@@ -43,6 +53,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // ======= Renderização dos pedidos e valores =======
     function renderizarPedidos() {
         listaPedidos.innerHTML = '';
         listaValores.innerHTML = '';
@@ -75,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function () {
         listaValores.appendChild(liSoma);
     }
 
-    // Adicionar mesa manualmente
+    // ======= Adicionar mesa manualmente =======
     btnAdicionarMesaManual.addEventListener('click', () => {
         inputNomeMesaManual.value = '';
         modalAdicionarMesa.style.display = 'flex';
@@ -95,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function () {
         modalAdicionarMesa.style.display = 'none';
     });
 
-    // Botão Opções e Fechar
+    // ======= Botão Opções e Fechar =======
     btnOpcoes.addEventListener('click', function () {
         btnOpcoes.style.display = 'none';
         botoesPedidos.style.display = 'flex';
@@ -105,27 +116,36 @@ document.addEventListener('DOMContentLoaded', function () {
         btnOpcoes.style.display = 'inline-block';
     });
 
-    // Adicionar pedido
+    // ======= Adicionar pedido =======
     btnAdd.addEventListener('click', function () {
         if (mesaAtual < 0) return;
         const modalAdicionar = document.getElementById('modalAdicionar');
         const inputAdicionar = document.getElementById('novoPedidoAdicionar');
+        const inputValor = document.getElementById('valorPedido');
         modalAdicionar.style.display = 'flex';
         inputAdicionar.value = '';
+        inputValor.value = '';
         inputAdicionar.focus();
+
+        // Permitir apenas letras e espaços no campo de pedido
+        inputAdicionar.addEventListener('input', function () {
+            this.value = this.value.replace(/[^a-zA-ZÀ-ÿ\s]/g, '');
+        });
+
+        // Permitir apenas números, ponto e vírgula no campo de valor
+        inputValor.addEventListener('input', function () {
+            this.value = this.value.replace(/[^0-9.,]/g, '');
+        });
 
         document.getElementById('btnSalvarAdicionar').onclick = () => {
             let pedido = inputAdicionar.value.trim();
-            if (pedido) {
-                // Regex para separar nome e valor (ex: "Espeto Queijo 9" ou "Coca-Cola 6.5")
-                const match = pedido.match(/^(.+?)\s+(\d+(?:[.,]\d{1,2})?)$/);
-                if (match) {
-                    let nome = match[1].trim();
-                    let valor = match[2].replace(',', '.');
-                    valor = parseFloat(valor).toFixed(2).replace('.', ',');
-                    pedido = `${nome}(R$${valor})`;
-                }
-                mesas[mesaAtual].pedidos.push(pedido);
+            let valor = inputValor.value.trim().replace(',', '.');
+            if (pedido && valor && !isNaN(valor)) {
+                // Deixa a primeira letra maiúscula e o resto igual
+                pedido = pedido.charAt(0).toUpperCase() + pedido.slice(1);
+                valor = parseFloat(valor).toFixed(2).replace('.', ',');
+                const pedidoFormatado = `${pedido}(R$${valor})`;
+                mesas[mesaAtual].pedidos.push(pedidoFormatado);
                 renderizarPedidos();
             }
             modalAdicionar.style.display = 'none';
@@ -135,7 +155,7 @@ document.addEventListener('DOMContentLoaded', function () {
         };
     });
 
-    // Remover pedido
+    // ======= Remover pedido =======
     btnRem.addEventListener('click', function () {
         if (mesaAtual < 0) return;
         const pedidos = mesas[mesaAtual].pedidos;
@@ -146,6 +166,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    // ======= Restaurar pedido removido =======
     function mostrarBotaoRestaurarPedido() {
         if (btnRestaurarPedido) btnRestaurarPedido.remove();
         btnRestaurarPedido = document.createElement('button');
@@ -172,7 +193,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 10000);
     }
 
-    // Editar pedido
+    // ======= Editar pedido =======
     btnEdit.addEventListener('click', function () {
         if (mesaAtual < 0) return;
         const pedidos = mesas[mesaAtual].pedidos;
@@ -214,7 +235,7 @@ document.addEventListener('DOMContentLoaded', function () {
         };
     });
 
-    // Finalizar mesa
+    // ======= Finalizar mesa =======
     btnFinalizarMesa.addEventListener('click', function () {
         if (mesaAtual < 0) return;
         ultimaMesaRemovida = {
@@ -228,6 +249,7 @@ document.addEventListener('DOMContentLoaded', function () {
         mostrarBotaoRestaurarMesa();
     });
 
+    // ======= Restaurar mesa removida =======
     function mostrarBotaoRestaurarMesa() {
         if (btnRestaurarMesa) btnRestaurarMesa.remove();
         btnRestaurarMesa = document.createElement('button');
@@ -255,10 +277,15 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 15000);
     }
 
-    // Forma de pagamento
-
-
+    // ======= Forma de pagamento =======
     btnFormaPagamento.addEventListener('click', () => {
+        // Só permite abrir se houver valor final maior que zero
+        const valorFinal = document.querySelector('.total-final');
+        if (!valorFinal || valorFinal.textContent.match(/R\$0,00/)) {
+            btnFormaPagamento.classList.add('disabled');
+            setTimeout(() => btnFormaPagamento.classList.remove('disabled'), 800);
+            return;
+        }
         modalPagamento.style.display = 'flex';
     });
 
@@ -266,16 +293,73 @@ document.addEventListener('DOMContentLoaded', function () {
         modalPagamento.style.display = 'none';
     });
 
-    // Ao clicar em uma opção de pagamento
+    // Ao clicar em uma opção de pagamento, apenas fecha o modal (NÃO altera o texto do botão)
     document.querySelectorAll('.pag-opcao').forEach(btn => {
         btn.addEventListener('click', function () {
-            formaPagamentoSelecionada = this.dataset.pag;
-            btnFormaPagamento.textContent = `Pagamento: ${formaPagamentoSelecionada}`;
             modalPagamento.style.display = 'none';
         });
     });
 
-    // Inicialização
+    // ======= Inicialização =======
     renderizarMesas();
     renderizarPedidos();
+
+    // ======= Restrições de input =======
+    inputNomeMesaManual.addEventListener('input', function () {
+        this.value = this.value.replace(/\D/g, ''); // Só números
+    });
+
+    document.getElementById('valorPedido').addEventListener('input', function () {
+        this.value = this.value.replace(/[^0-9.,]/g, ''); // Só números, ponto e vírgula
+    });
+
+    // Só permitir números, vírgula e ponto no campo de valor recebido
+    valorRecebido.addEventListener('input', function () {
+        this.value = this.value.replace(/[^0-9.,]/g, '');
+    });
+
+    // ======= Modal de Troco =======
+    document.querySelector('.pag-opcao[data-pag="Dinheiro"]').addEventListener('click', function () {
+        // Calcula o valor total
+        let total = 0;
+        if (mesaAtual >= 0 && mesas[mesaAtual]) {
+            mesas[mesaAtual].pedidos.forEach(pedido => {
+                const match = pedido.match(/R\$\s?([\d,.]+)/);
+                if (match) total += parseFloat(match[1].replace(',', '.'));
+            });
+        }
+        valorTotalTroco.textContent = `Valor total: R$ ${total.toFixed(2).replace('.', ',')}`;
+        valorRecebido.value = '';
+        resultadoTroco.textContent = '';
+        modalTroco.style.display = 'flex';
+    });
+
+    btnCalcularTroco.addEventListener('click', function () {
+        let recebido = valorRecebido.value.trim().replace(',', '.');
+        let total = 0;
+        if (mesaAtual >= 0 && mesas[mesaAtual]) {
+            mesas[mesaAtual].pedidos.forEach(pedido => {
+                const match = pedido.match(/R\$\s?([\d,.]+)/);
+                if (match) total += parseFloat(match[1].replace(',', '.'));
+            });
+        }
+        resultadoTroco.classList.remove('resultado-erro', 'resultado-sucesso');
+        if (recebido === '' || isNaN(recebido)) {
+            resultadoTroco.textContent = 'Digite um valor válido!';
+            resultadoTroco.classList.add('resultado-erro');
+            return;
+        }
+        const troco = recebido - total;
+        if (troco < 0) {
+            resultadoTroco.textContent = 'Valor recebido insuficiente!';
+            resultadoTroco.classList.add('resultado-erro');
+        } else {
+            resultadoTroco.textContent = `Troco: R$ ${troco.toFixed(2).replace('.', ',')}`;
+            resultadoTroco.classList.add('resultado-sucesso');
+        }
+    });
+
+    btnFecharTroco.addEventListener('click', function () {
+        modalTroco.style.display = 'none';
+    });
 });

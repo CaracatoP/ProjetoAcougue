@@ -1,5 +1,5 @@
 /* ---------------------------
-   RESET & BASE
+RESET & BASE
 ----------------------------*/
 body,
 h1,
@@ -22,7 +22,7 @@ body {
 }
 
 /* ---------------------------
-   HEADER
+HEADER
 ----------------------------*/
 .headLine {
     display: flex;
@@ -50,7 +50,7 @@ body {
 }
 
 /* ---------------------------
-   LAYOUT
+LAYOUT
 ----------------------------*/
 .container {
     display: flex;
@@ -81,7 +81,7 @@ body {
 }
 
 /* ---------------------------
-   LISTAS
+LISTAS
 ----------------------------*/
 .headmesa {
     margin-bottom: 16px;
@@ -122,8 +122,17 @@ body {
     color: #b71c1c;
 }
 
+.listaordenadamesas.contarMesa {
+    list-style: none;
+    padding-left: 0;
+}
+
+.listaordenadamesas.contarMesa li:focus {
+    outline: none;
+}
+
 /* ---------------------------
-   BOTÕES GERAIS
+BOTÕES GERAIS
 ----------------------------*/
 button {
     background: linear-gradient(90deg, #b71c1c 70%, #111 100%);
@@ -192,14 +201,12 @@ button.fechar:hover {
         opacity: 0;
         transform: translateY(-10px);
     }
-
     to {
         opacity: 1;
         transform: translateY(0);
     }
 }
 
-/* Botão Restaurar Pedido */
 button.restaurar {
     background: linear-gradient(90deg, #b71c1c 70%, #111 100%);
     color: #fff;
@@ -265,7 +272,7 @@ button.restaurar-mesa.fade-out {
 }
 
 /* ---------------------------
-   FINALIZAR MESA
+FINALIZAR MESA
 ----------------------------*/
 .finalizarMesa {
     background: #fff;
@@ -286,7 +293,7 @@ button.restaurar-mesa.fade-out {
 }
 
 /* ---------------------------
-   PAGAMENTO E VALORES
+PAGAMENTO E VALORES
 ----------------------------*/
 .pag {
     background: #f7f7fa;
@@ -350,10 +357,8 @@ button.restaurar-mesa.fade-out {
 
 button.fpag:hover,
 button.fpag:focus {
-    background: linear-gradient(90deg, #ff5252 60%, #b71c1c 100%);
+    background: #ff5252;
     color: #fff;
-    transform: translateY(-3px) scale(1.04);
-    box-shadow: 0 6px 20px #b71c1c55, 0 2px 8px #0005;
 }
 
 button.fpag::after {
@@ -366,6 +371,13 @@ button.fpag::after {
     opacity: 0.7;
     pointer-events: none;
     transition: opacity 0.3s;
+}
+
+button.fpag.disabled {
+    filter: grayscale(0.7) brightness(1.1);
+    opacity: 0.6;
+    pointer-events: none;
+    cursor: not-allowed;
 }
 
 /* ---------------------------
@@ -382,6 +394,13 @@ MODAL (EDITAR/ADICIONAR)
     align-items: center;
     justify-content: center;
     z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.35s cubic-bezier(.4,0,.2,1);
+}
+
+.modal-editar[style*="display: flex"] {
+    display: flex !important;
+    opacity: 1;
 }
 
 .modal-content {
@@ -414,6 +433,7 @@ MODAL (EDITAR/ADICIONAR)
     display: flex;
     gap: 10px;
     justify-content: flex-end;
+    flex-wrap: wrap;
 }
 
 .modal-actions button {
@@ -424,11 +444,13 @@ MODAL (EDITAR/ADICIONAR)
     cursor: pointer;
     background: linear-gradient(90deg, #b71c1c 70%, #111 100%);
     color: #fff;
-    transition: background 0.2s;
+    transition: background 0.2s, color 0.2s, transform 0.22s;
 }
 
 .modal-actions button#btnCancelarEdicao,
-.modal-actions button#btnCancelarAdicionar {
+.modal-actions button#btnCancelarAdicionar,
+.modal-actions button#btnCancelarPagamento,
+.modal-actions button#btnFecharTroco {
     background: #888;
     color: #fff;
 }
@@ -447,7 +469,7 @@ MODAL (EDITAR/ADICIONAR)
 }
 
 /* ---------------------------
-   SCROLLBAR CUSTOM
+SCROLLBAR CUSTOM
 ----------------------------*/
 ::-webkit-scrollbar {
     width: 8px;
@@ -459,13 +481,154 @@ MODAL (EDITAR/ADICIONAR)
     border-radius: 8px;
 }
 
-.listaordenadamesas.contarMesa {
-    list-style: none;
-    padding-left: 0;
+/* ---------------------------
+MODAL DE TROCO
+----------------------------*/
+#modalTroco .modal-content {
+    background: #fff;
+    border: 2px solid #ff5252;
+    box-shadow: 0 6px 32px #b71c1c33, 0 2px 8px #0002;
+    border-radius: 16px;
+    padding: 32px 28px 26px 28px;
+    min-width: 320px;
+    max-width: 95vw;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 18px;
+}
+
+#modalTroco .modal-content h3 {
+    color: #b71c1c;
+    font-size: 1.35em;
+    margin-bottom: 6px;
+    text-align: center;
+    letter-spacing: 1px;
+}
+
+#valorTotalTroco {
+    font-size: 1.13em;
+    color: #b71c1c;
+    font-weight: bold;
+    background: #f7f7fa;
+    border-radius: 7px;
+    padding: 8px 0 8px 0;
+    text-align: center;
+    margin-bottom: 0;
+    border: 1px solid #ff5252;
+}
+
+#valorRecebido {
+    font-size: 1.13em;
+    border: 1.5px solid #b71c1c;
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-bottom: 0;
+    outline: none;
+    background: #fff;
+    transition: border 0.2s, box-shadow 0.2s;
+    box-shadow: 0 1px 4px #b71c1c11;
+}
+
+#valorRecebido:focus {
+    border: 1.5px solid #43a047;
+    box-shadow: 0 2px 8px #43a04722;
+}
+
+#modalTroco .modal-actions {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    margin-top: 4px;
+}
+
+#btnCalcularTroco {
+    background: linear-gradient(90deg, #43a047 70%, #b71c1c 100%);
+    color: #fff;
+    font-weight: bold;
+    border-radius: 8px;
+    padding: 10px 22px;
+    font-size: 1.08em;
+    box-shadow: 0 2px 8px #43a04733;
+    transition: background 0.25s, transform 0.18s;
+}
+
+#btnCalcularTroco:hover,
+#btnCalcularTroco:focus {
+    background: linear-gradient(90deg, #388e3c 70%, #b71c1c 100%);
+    transform: translateY(-2px) scale(1.05);
+}
+
+#btnFecharTroco {
+    background: #888;
+    color: #fff;
+    border-radius: 8px;
+    padding: 10px 22px;
+    font-size: 1.08em;
+    font-weight: bold;
+    box-shadow: 0 2px 8px #0002;
+    transition: background 0.2s, transform 0.18s;
+}
+
+#btnFecharTroco:hover,
+#btnFecharTroco:focus {
+    background: #b71c1c;
+    color: #fff;
+    transform: translateY(-2px) scale(1.05);
+}
+
+#resultadoTroco {
+    font-size: 1.15em;
+    font-weight: bold;
+    min-height: 1.7em;
+    margin-top: 10px;
+    text-align: center;
+    letter-spacing: 1px;
+    border-radius: 7px;
+    padding: 8px 0;
+    background: #f7f7fa;
+    border: 1px solid #ff5252;
+    box-shadow: 0 1px 4px #b71c1c11;
+}
+
+.resultado-erro {
+    color: #b71c1c;
+    background: #ffebee;
+    border-color: #ffcdd2;
+}
+
+.resultado-sucesso {
+    color: #43a047;
+    background: #e8f5e9;
+    border-color: #a5d6a7;
 }
 
 /* ---------------------------
-   RESPONSIVIDADE
+PAGAMENTO OPÇÕES
+----------------------------*/
+.pag-opcao {
+    width: 100%;
+    padding: 10px 0;
+    font-size: 1.1em;
+    border-radius: 6px;
+    border: none;
+    background: #f7f7fa;
+    color: #b71c1c;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.pag-opcao:hover,
+.pag-opcao:focus {
+    background: #b71c1c;
+    color: #fff;
+    transform: scale(1.04);
+    box-shadow: 0 4px 16px #b71c1c33;
+}
+
+/* ---------------------------
+RESPONSIVIDADE
 ----------------------------*/
 @media (max-width: 1200px) {
     .container {
@@ -548,62 +711,4 @@ button.fpag:hover,
 button.fpag:focus {
     background: #ff5252;
     color: #fff;
-}
-
-.pag-opcao {
-    width: 100%;
-    padding: 10px 0;
-    font-size: 1.1em;
-    border-radius: 6px;
-    border: none;
-    background: #f7f7fa;
-    color: #b71c1c;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.2s, color 0.2s;
-}
-
-.pag-opcao:hover,
-.pag-opcao:focus {
-    background: #b71c1c;
-    color: #fff;
-}
-
-/* Modal de pagamento: animação de entrada */
-.modal-editar {
-    display: none;
-    opacity: 0;
-    transition: opacity 0.35s cubic-bezier(.4,0,.2,1);
-}
-.modal-editar[style*="display: flex"] {
-    display: flex !important;
-    opacity: 1;
-}
-
-/* Opções de pagamento com efeito suave */
-.pag-opcao {
-    width: 100%;
-    padding: 12px 0;
-    font-size: 1.12em;
-    border-radius: 8px;
-    border: none;
-    background: #f7f7fa;
-    color: #b71c1c;
-    font-weight: bold;
-    cursor: pointer;
-    margin-bottom: 6px;
-    box-shadow: 0 1px 4px #0001;
-    transition: 
-        background 0.28s cubic-bezier(.4,0,.2,1),
-        color 0.22s cubic-bezier(.4,0,.2,1),
-        transform 0.22s cubic-bezier(.4,0,.2,1),
-        box-shadow 0.22s cubic-bezier(.4,0,.2,1);
-}
-
-.pag-opcao:hover,
-.pag-opcao:focus {
-    background: #b71c1c;
-    color: #fff;
-    transform: scale(1.04);
-    box-shadow: 0 4px 16px #b71c1c33;
 }
