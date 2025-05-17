@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="PT-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Pedidos</title>
+</head>
+
+<body>
+    <!-- Cabeçalho -->
+    <div class="headLine">
+        <h1 class="head2">Central Carnes Cerro Azul</h1>
+        <h2 class="head3">Logo</h2>
+    </div>
+
+    <div class="container">
+        <!-- Coluna de Mesas -->
+        <div class="mesas">
+            <section class="firstCollumn">
+                <h2 class="headmesa">Lista Mesas</h2>
+                <button class="adicionarMesaManual">Adicionar Mesa</button>
+                <div class="listamesas">
+                    <ol class="listaordenadamesas contarMesa">
+                        <!-- Começa vazio -->
+                    </ol>
+                </div>
+                <button class="opcoes">Opções</button>
+                <div class="botoesPedidos">
+                    <button class="add">Adicionar</button>
+                    <button class="rem">Remover</button>
+                    <button class="edit">Editar</button>
+                    <button class="fechar">&#10006;</button>
+                </div>
+                <p class="finalizarMesa">Finalizar mesa</p>
+            </section>
+        </div>
+
+        <!-- Coluna de Pedidos -->
+        <div class="pedidosMesa secondCollumn">
+            <section class="opçõesMesa">
+                <div class="listaPedidos">
+                    <h2>Lista pedidos</h2>
+                    <ol class="listaordenadamesas esquerda">
+                        <!-- Os pedidos são preenchidos dinamicamente pelo JS -->
+                    </ol>
+                </div>
+            </section>
+        </div>
+
+        <!-- Coluna de Impressão/Valores -->
+        <div class="print">
+            <section>
+                <div class="pag">
+                    <h2>Valor Final</h2>
+                    <ol class="listaordenadamesas valorProduto">
+                        <!-- Valores preenchidos dinamicamente -->
+                    </ol>
+                    <button class="fpag" id="btnFormaPagamento">Forma de Pagamento</button>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Modal para editar/excluir pedido -->
+    <div id="modalEditar" class="modal-editar">
+        <div class="modal-content">
+            <h3>Editar ou Excluir Pedido</h3>
+            <select id="selectPedido"></select>
+            <input type="text" id="novoPedido" placeholder="Novo pedido e valor">
+            <div class="modal-actions">
+                <button id="btnSalvarEdicao">Salvar</button>
+                <button id="btnExcluirPedido">Excluir</button>
+                <button id="btnCancelarEdicao">Cancelar</button>
+            </div>
+        </div>
+    </div>
+    <!-- Modal para adicionar pedido -->
+    <div id="modalAdicionar" class="modal-editar">
+        <div class="modal-content">
+            <h3>Adicionar Pedido</h3>
+            <input type="text" id="novoPedidoAdicionar" placeholder="Pedido e valor (ex: Espeto Queijo(R$9.00))">
+            <div class="modal-actions">
+                <button id="btnSalvarAdicionar">Adicionar</button>
+                <button id="btnCancelarAdicionar">Cancelar</button>
+            </div>
+        </div>
+    </div>
+    <div id="modalAdicionarMesa" class="modal-editar">
+        <div class="modal-content">
+            <h3>Adicionar Mesa</h3>
+            <input type="text" id="nomeMesaManual" placeholder="Nome da mesa">
+            <div class="modal-actions">
+                <button id="btnSalvarMesaManual">Adicionar</button>
+                <button id="btnCancelarMesaManual">Cancelar</button>
+            </div>
+        </div>
+    </div>
+    <!-- Modal para adicionar mesa manualmente (adicione antes do </body>) -->
+    <div id="modalAdicionarMesa" class="modal-editar" style="display:none;">
+        <div class="modal-content">
+            <h3>Adicionar Mesa</h3>
+            <input type="text" id="nomeMesaManual" placeholder="Número ou nome da mesa">
+            <div class="modal-actions">
+                <button id="btnSalvarMesaManual">Adicionar</button>
+                <button id="btnCancelarMesaManual">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalPagamento" class="modal-editar">
+        <div class="modal-content">
+            <h3>Escolha a forma de pagamento</h3>
+            <div class="modal-actions" style="flex-direction:column;gap:12px;">
+                <button class="pag-opcao" data-pag="Pix">Pix</button>
+                <button class="pag-opcao" data-pag="Cartão de Crédito">Cartão de Crédito</button>
+                <button class="pag-opcao" data-pag="Cartão de Débito">Cartão de Débito</button>
+                <button class="pag-opcao" data-pag="Dinheiro">Dinheiro</button>
+                <button id="btnCancelarPagamento" style="margin-top:10px;background:#888;">Cancelar</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
