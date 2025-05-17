@@ -1,0 +1,34 @@
+{
+    "date": "17/05/2025 14:48",
+    "title": "Changelog – Atualização do Sistema de Pedidos",
+    "changes": [
+        {
+            "title": "Limitação de Escrita nos Campos",
+            "description": "Agora cada campo aceita apenas o tipo de dado necessário (ex: campo de valor só aceita números e vírgula, campo de mesa só aceita números, etc.), evitando erros de digitação."
+        },
+        {
+            "title": "Cálculo Automático de Troco",
+            "description": "Ao selecionar a opção 'Dinheiro' na forma de pagamento, um modal permite inserir o valor recebido e o sistema calcula automaticamente o troco a ser devolvido."
+        },
+        {
+            "title": "Aprimoramento e Otimização do Código",
+            "description": "O código JavaScript foi reorganizado, documentado e otimizado para melhor desempenho, clareza e manutenção."
+        },
+        {
+            "title": "Alterações no Layout e Responsividade",
+            "description": "O layout foi ajustado para melhor visualização em diferentes tamanhos de tela, com melhorias visuais nos modais, botões e áreas de destaque."
+        },
+        {
+            "title": "Feedback Visual e Usabilidade",
+            "description": "Botões e campos agora apresentam feedback visual ao receberem foco ou ao serem desabilitados, melhorando a experiência do usuário."
+        },
+        {
+            "title": "Validação de Ações",
+            "description": "Não é mais possível abrir a forma de pagamento se não houver valor final, evitando operações desnecessárias."
+        },
+        {
+            "title": "Padronização de Estilo",
+            "description": "O CSS foi reorganizado e documentado, mantendo todas as animações e efeitos visuais, facilitando futuras manutenções."
+        }
+    ]
+}
